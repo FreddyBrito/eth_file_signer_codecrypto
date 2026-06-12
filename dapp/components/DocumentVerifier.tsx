@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ethers } from "ethers";
 import { useContract, DocumentInfo } from "@/hooks/useContract";
-import { ShieldCheck, ShieldAlert, Loader2 } from "lucide-react";
+import { ShieldCheck, ShieldAlert, Loader2, Upload, FileCheck } from "lucide-react";
 
 interface VerificationResult {
   isValid: boolean;
@@ -17,6 +17,19 @@ export default function DocumentVerifier() {
   const [result, setResult] = useState<VerificationResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setFileName(file.name);
+    const buffer = await file.arrayBuffer();
+    const uint8Array = new Uint8Array(buffer);
+    const hash = ethers.keccak256(uint8Array);
+    setFileHash(hash);
+  };
 
   const handleVerify = async () => {
     if (!fileHash || !signerAddress) return;
@@ -53,6 +66,27 @@ export default function DocumentVerifier() {
 
   return (
     <div className="space-y-4">
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-500 transition-colors">
+        <input
+          ref={fileRef}
+          type="file"
+          onChange={handleFileChange}
+          className="hidden"
+          id="verify-file-upload"
+        />
+        <label htmlFor="verify-file-upload" className="cursor-pointer">
+          <Upload className="w-10 h-10 mx-auto text-gray-400 mb-3" />
+          {fileName ? (
+            <div className="flex items-center justify-center gap-2">
+              <FileCheck className="w-5 h-5 text-green-600" />
+              <span className="font-medium text-green-800">{fileName}</span>
+            </div>
+          ) : (
+            <p className="text-gray-600">Click to upload file for verification</p>
+          )}
+        </label>
+      </div>
+
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Document Hash
@@ -61,8 +95,8 @@ export default function DocumentVerifier() {
           type="text"
           value={fileHash}
           onChange={(e) => setFileHash(e.target.value)}
-          placeholder="0x..."
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="0x... or upload a file above"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
         />
       </div>
 
