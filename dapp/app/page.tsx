@@ -7,6 +7,7 @@ import DocumentSigner from "@/components/DocumentSigner";
 import DocumentVerifier from "@/components/DocumentVerifier";
 import DocumentHistory from "@/components/DocumentHistory";
 import { Wallet, FileCheck, Search, History, ChevronDown, Copy, Check } from "lucide-react";
+import DarkModeToggle from "@/components/DarkModeToggle";
 
 function AppContent() {
   const { isConnected, connectedWallet, wallets, connect, disconnect, walletIndex } =
@@ -37,28 +38,40 @@ function AppContent() {
     <div className="min-h-screen" style={{ backgroundColor: "var(--color-canvas)" }}>
       <div className="max-w-4xl mx-auto" style={{ padding: "var(--spacing-xxl)" }}>
         {/* Header */}
-        <div className="text-center" style={{ marginBottom: "var(--spacing-xxxl)" }}>
-          <h1
-            style={{
-              fontSize: "48px",
-              fontWeight: 500,
-              lineHeight: 1.17,
-              color: "var(--color-ink-deep)",
-              marginBottom: "var(--spacing-sm)",
-            }}
-          >
-            Document Registry
-          </h1>
-          <p
-            style={{
-              fontSize: "18px",
-              fontWeight: 400,
-              lineHeight: 1.44,
-              color: "var(--color-steel)",
-            }}
-          >
-            Store and verify document authenticity on Ethereum
-          </p>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "var(--spacing-xxxl)",
+          }}
+        >
+          <div style={{ flex: 1, textAlign: "center" }}>
+            <h1
+              style={{
+                fontSize: "48px",
+                fontWeight: 500,
+                lineHeight: 1.17,
+                color: "var(--color-ink-deep)",
+                marginBottom: "var(--spacing-sm)",
+              }}
+            >
+              Document Registry
+            </h1>
+            <p
+              style={{
+                fontSize: "18px",
+                fontWeight: 400,
+                lineHeight: 1.44,
+                color: "var(--color-steel)",
+              }}
+            >
+              Store and verify document authenticity on Ethereum
+            </p>
+          </div>
+          <div style={{ position: "absolute", right: "var(--spacing-xxl)" }}>
+            <DarkModeToggle />
+          </div>
         </div>
 
         {/* Wallet Connection Card */}

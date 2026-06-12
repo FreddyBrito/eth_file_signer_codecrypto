@@ -58,6 +58,28 @@
   --foreground: var(--color-ink-deep);
 }
 
+/* Dark Mode */
+.dark {
+  /* Meta Colors - Surface Dark */
+  --color-canvas: #0a0a0a;
+  --color-surface-soft: #1a1a1a;
+  --color-hairline: #333333;
+  --color-hairline-soft: #2a2a2a;
+
+  /* Meta Colors - Text Dark */
+  --color-ink-deep: #ffffff;
+  --color-ink: #e5e5e5;
+  --color-charcoal: #b3b3b3;
+  --color-slate: #a0a0a0;
+  --color-steel: #808080;
+  --color-stone: #666666;
+  --color-disabled-text: #444444;
+
+  /* Background Dark */
+  --background: var(--color-canvas);
+  --foreground: var(--color-ink-deep);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
