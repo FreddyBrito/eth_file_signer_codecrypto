@@ -26,30 +26,79 @@ export default function FileUploader({ onHashComputed }: FileUploaderProps) {
   };
 
   return (
-    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors">
+    <div
+      style={{
+        border: "2px dashed var(--color-hairline)",
+        borderRadius: "var(--rounded-xxxl)",
+        padding: "var(--spacing-xxl)",
+        textAlign: "center",
+        cursor: "pointer",
+        transition: "border-color 0.15s ease",
+      }}
+      onClick={() => fileRef.current?.click()}
+      onMouseEnter={(e) =>
+        (e.currentTarget.style.borderColor = "var(--color-primary)")
+      }
+      onMouseLeave={(e) =>
+        (e.currentTarget.style.borderColor = "var(--color-hairline)")
+      }
+    >
       <input
         ref={fileRef}
         type="file"
         onChange={handleFileChange}
-        className="hidden"
+        style={{ display: "none" }}
         id="file-upload"
       />
-      <label htmlFor="file-upload" className="cursor-pointer">
-        <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-        <p className="text-gray-600 mb-2">
-          {fileName ? "Click to select another file" : "Click to select a file"}
-        </p>
-        <p className="text-sm text-gray-400">Any file type supported</p>
-      </label>
+
+      <Upload
+        style={{
+          width: "48px",
+          height: "48px",
+          margin: "0 auto var(--spacing-md)",
+          color: "var(--color-stone)",
+        }}
+      />
+
+      <p
+        style={{
+          fontSize: "16px",
+          fontWeight: 400,
+          color: "var(--color-charcoal)",
+          marginBottom: "var(--spacing-xs)",
+        }}
+      >
+        {fileName ? "Click to select another file" : "Click to select a file"}
+      </p>
+      <p style={{ fontSize: "14px", color: "var(--color-stone)" }}>
+        Any file type supported
+      </p>
 
       {fileName && computedHash && (
-        <div className="mt-6 p-4 bg-green-50 rounded-lg">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <FileCheck className="w-5 h-5 text-green-600" />
-            <span className="font-medium text-green-800">{fileName}</span>
+        <div
+          style={{
+            marginTop: "var(--spacing-xl)",
+            padding: "var(--spacing-lg)",
+            backgroundColor: "var(--color-surface-soft)",
+            borderRadius: "var(--rounded-xl)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "var(--spacing-xs)",
+              marginBottom: "var(--spacing-xs)",
+            }}
+          >
+            <FileCheck style={{ width: "20px", height: "20px", color: "var(--color-success)" }} />
+            <span style={{ fontWeight: 700, fontSize: "14px", color: "var(--color-ink-deep)" }}>
+              {fileName}
+            </span>
           </div>
-          <p className="text-xs text-gray-500 break-all">
-            <span className="font-medium">Hash:</span> {computedHash}
+          <p style={{ fontSize: "12px", color: "var(--color-steel)", wordBreak: "break-all" }}>
+            <span style={{ fontWeight: 700 }}>Hash:</span> {computedHash}
           </p>
         </div>
       )}

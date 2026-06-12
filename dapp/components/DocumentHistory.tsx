@@ -43,56 +43,135 @@ export default function DocumentHistory() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <History className="w-5 h-5 text-gray-600" />
-          <span className="font-medium text-gray-800">
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-md)" }}>
+      {/* Header */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--spacing-xs)",
+          }}
+        >
+          <History style={{ width: "20px", height: "20px", color: "var(--color-ink)" }} />
+          <span style={{ fontWeight: 700, fontSize: "16px", color: "var(--color-ink-deep)" }}>
             {count} document{count !== 1 ? "s" : ""} stored
           </span>
         </div>
         <button
           onClick={loadHistory}
           disabled={loading}
-          className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--spacing-xxs)",
+            fontSize: "14px",
+            fontWeight: 700,
+            color: "var(--color-primary)",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+          }}
         >
           {loading ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
+            <Loader2 style={{ width: "16px", height: "16px", animation: "spin 1s linear infinite" }} />
           ) : (
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw style={{ width: "16px", height: "16px" }} />
           )}
           Refresh
         </button>
       </div>
 
+      {/* Empty State */}
       {documents.length === 0 ? (
-        <div className="text-center py-8 text-gray-400">
+        <div
+          style={{
+            textAlign: "center",
+            padding: "var(--spacing-xxxl) 0",
+            color: "var(--color-stone)",
+            fontSize: "16px",
+          }}
+        >
           No documents stored yet
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        /* Table */
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", fontSize: "14px", borderCollapse: "collapse" }}>
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-2 font-medium text-gray-600">Hash</th>
-                <th className="text-left py-3 px-2 font-medium text-gray-600">Signer</th>
-                <th className="text-left py-3 px-2 font-medium text-gray-600">Timestamp</th>
+              <tr style={{ borderBottom: "1px solid var(--color-hairline-soft)" }}>
+                <th
+                  style={{
+                    textAlign: "left",
+                    padding: "var(--spacing-md) var(--spacing-sm)",
+                    fontWeight: 700,
+                    color: "var(--color-steel)",
+                  }}
+                >
+                  Hash
+                </th>
+                <th
+                  style={{
+                    textAlign: "left",
+                    padding: "var(--spacing-md) var(--spacing-sm)",
+                    fontWeight: 700,
+                    color: "var(--color-steel)",
+                  }}
+                >
+                  Signer
+                </th>
+                <th
+                  style={{
+                    textAlign: "left",
+                    padding: "var(--spacing-md) var(--spacing-sm)",
+                    fontWeight: 700,
+                    color: "var(--color-steel)",
+                  }}
+                >
+                  Timestamp
+                </th>
               </tr>
             </thead>
             <tbody>
               {documents.map((doc, index) => (
-                <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="py-3 px-2">
-                    <span className="font-mono text-xs" title={doc.hash}>
-                      {truncateHash(doc.hash)}
-                    </span>
+                <tr
+                  key={index}
+                  style={{
+                    borderBottom: "1px solid var(--color-hairline-soft)",
+                  }}
+                >
+                  <td
+                    style={{
+                      padding: "var(--spacing-md) var(--spacing-sm)",
+                      fontFamily: "monospace",
+                      fontSize: "12px",
+                    }}
+                    title={doc.hash}
+                  >
+                    {truncateHash(doc.hash)}
                   </td>
-                  <td className="py-3 px-2">
-                    <span className="font-mono text-xs" title={doc.signer}>
-                      {truncateAddress(doc.signer)}
-                    </span>
+                  <td
+                    style={{
+                      padding: "var(--spacing-md) var(--spacing-sm)",
+                      fontFamily: "monospace",
+                      fontSize: "12px",
+                    }}
+                    title={doc.signer}
+                  >
+                    {truncateAddress(doc.signer)}
                   </td>
-                  <td className="py-3 px-2 text-gray-600">
+                  <td
+                    style={{
+                      padding: "var(--spacing-md) var(--spacing-sm)",
+                      color: "var(--color-charcoal)",
+                    }}
+                  >
                     {new Date(Number(doc.timestamp) * 1000).toLocaleString()}
                   </td>
                 </tr>

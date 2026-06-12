@@ -1,26 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Meta Colors - Brand & Accent */
+  --color-primary: #0064e0;
+  --color-primary-deep: #0457cb;
+  --color-primary-soft: #0091ff;
+  --color-on-primary: #ffffff;
+  --color-ink-button: #000000;
+  --color-on-ink-button: #ffffff;
+  --color-fb-blue: #1876f2;
+  --color-success: #31a24c;
+  --color-attention: #f2a918;
+  --color-warning: #f7b928;
+  --color-critical: #e41e3f;
+  --color-critical-strong: #f0284a;
+
+  /* Meta Colors - Surface */
+  --color-canvas: #ffffff;
+  --color-surface-soft: #f1f4f7;
+  --color-hairline: #ced0d4;
+  --color-hairline-soft: #dee3e9;
+
+  /* Meta Colors - Text */
+  --color-ink-deep: #0a1317;
+  --color-ink: #1c1e21;
+  --color-charcoal: #444950;
+  --color-slate: #4b4c4f;
+  --color-steel: #5d6c7b;
+  --color-stone: #8595a4;
+  --color-disabled-text: #bcc0c4;
+
+  /* Meta Spacing */
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 10px;
+  --spacing-md: 12px;
+  --spacing-base: 16px;
+  --spacing-lg: 20px;
+  --spacing-xl: 24px;
+  --spacing-xxl: 32px;
+  --spacing-xxxl: 40px;
+
+  /* Meta Rounded */
+  --rounded-xs: 2px;
+  --rounded-sm: 4px;
+  --rounded-md: 6px;
+  --rounded-lg: 8px;
+  --rounded-xl: 16px;
+  --rounded-xxl: 24px;
+  --rounded-xxxl: 32px;
+  --rounded-feature: 40px;
+  --rounded-full: 100px;
+
+  /* Background */
+  --background: var(--color-canvas);
+  --foreground: var(--color-ink-deep);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: 'Montserrat', Arial, Helvetica, sans-serif;
+  --font-mono: 'Courier New', monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Meta Button Styles */
+.btn-primary {
+  background-color: var(--color-ink-button);
+  color: var(--color-on-ink-button);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -0.14px;
+  padding: 14px 30px;
+  border-radius: var(--rounded-full);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-charcoal);
+}
+
+.btn-primary:disabled {
+  background-color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
+.btn-buy-cta {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -0.14px;
+  padding: 14px 30px;
+  border-radius: var(--rounded-full);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-buy-cta:hover {
+  background-color: var(--color-primary-deep);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-ink-deep);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -0.14px;
+  padding: 12px 28px;
+  border-radius: var(--rounded-full);
+  border: 2px solid var(--color-ink-deep);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(10, 19, 23, 0.05);
+}
+
+/* Meta Card Styles */
+.card-product-feature {
+  background-color: var(--color-canvas);
+  border-radius: var(--rounded-xxxl);
+  padding: var(--spacing-xxl);
+  border: 1px solid var(--color-hairline-soft);
+}
+
+.card-icon-feature {
+  background-color: var(--color-canvas);
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-hairline-soft);
+}
+
+/* Meta Input Styles */
+.text-input {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: 16px;
+  line-height: 1.5;
+  border-radius: var(--rounded-lg);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-hairline);
+  height: 44px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.text-input:focus {
+  border: 2px solid var(--color-fb-blue);
+}
+
+/* Meta Badge Styles */
+.badge-success {
+  background-color: var(--color-success);
+  color: var(--color-on-primary);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.33;
+  padding: 4px 10px;
+  border-radius: var(--rounded-full);
+}
+
+.badge-critical {
+  background-color: var(--color-critical);
+  color: var(--color-on-primary);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.33;
+  padding: 4px 10px;
+  border-radius: var(--rounded-full);
+}
+
+/* Meta Tab Styles */
+.tab-pill {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -0.14px;
+  padding: 8px 16px;
+  border-radius: var(--rounded-full);
+  border: 1px solid var(--color-hairline);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tab-pill-active {
+  background-color: var(--color-ink-deep);
+  color: var(--color-canvas);
+  border-color: var(--color-ink-deep);
+}
+
+/* Typography Utilities */
+.font-hero-display {
+  font-size: 64px;
+  font-weight: 500;
+  line-height: 1.16;
+}
+
+.font-display-lg {
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1.17;
+}
+
+.font-heading-lg {
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.28;
+}
+
+.font-heading-md {
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1.21;
+}
+
+.font-heading-sm {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.font-subtitle-lg {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.44;
+}
+
+.font-subtitle-md {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.44;
+}
+
+.font-body-md {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.50;
+  letter-spacing: -0.16px;
+}
+
+.font-body-sm {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.43;
+  letter-spacing: -0.14px;
+}
+
+.font-caption {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.33;
 }

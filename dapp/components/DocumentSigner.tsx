@@ -54,55 +54,120 @@ export default function DocumentSigner({ hash }: DocumentSignerProps) {
 
   if (!hash) {
     return (
-      <div className="text-center py-8 text-gray-400">
+      <div
+        style={{
+          textAlign: "center",
+          padding: "var(--spacing-xxxl) 0",
+          color: "var(--color-stone)",
+          fontSize: "16px",
+        }}
+      >
         Upload a file first to sign it
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      <div className="p-4 bg-gray-50 rounded-lg">
-        <p className="text-sm font-medium text-gray-700 mb-1">Document Hash</p>
-        <p className="text-xs break-all text-gray-600">{hash}</p>
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-md)" }}>
+      <div
+        style={{
+          padding: "var(--spacing-lg)",
+          backgroundColor: "var(--color-surface-soft)",
+          borderRadius: "var(--rounded-xl)",
+        }}
+      >
+        <p
+          style={{
+            fontSize: "14px",
+            fontWeight: 700,
+            color: "var(--color-ink)",
+            marginBottom: "var(--spacing-xxs)",
+          }}
+        >
+          Document Hash
+        </p>
+        <p style={{ fontSize: "12px", wordBreak: "break-all", color: "var(--color-charcoal)" }}>
+          {hash}
+        </p>
       </div>
 
       {!signature ? (
         <button
           onClick={handleSign}
           disabled={!isConnected || loading}
-          className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="btn-primary"
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "var(--spacing-xs)",
+          }}
         >
-          <PenLine className="w-5 h-5" />
+          <PenLine style={{ width: "20px", height: "20px" }} />
           Sign Document
         </button>
       ) : (
-        <div className="space-y-3">
-          <div className="p-3 bg-green-50 rounded-lg">
-            <div className="flex items-center gap-2 mb-1">
-              <Check className="w-4 h-4 text-green-600" />
-              <span className="text-sm font-medium text-green-800">Signed</span>
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-sm)" }}>
+          <div
+            style={{
+              padding: "var(--spacing-md)",
+              backgroundColor: "rgba(49, 162, 76, 0.1)",
+              borderRadius: "var(--rounded-lg)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--spacing-xs)",
+                marginBottom: "var(--spacing-xxs)",
+              }}
+            >
+              <Check style={{ width: "16px", height: "16px", color: "var(--color-success)" }} />
+              <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--color-success)" }}>
+                Signed
+              </span>
             </div>
-            <p className="text-xs break-all text-gray-600">{signature.slice(0, 50)}...</p>
+            <p style={{ fontSize: "12px", wordBreak: "break-all", color: "var(--color-charcoal)" }}>
+              {signature.slice(0, 50)}...
+            </p>
           </div>
 
           {!txHash ? (
             <button
               onClick={handleStore}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="btn-buy-cta"
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "var(--spacing-xs)",
+              }}
             >
               {loading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 style={{ width: "20px", height: "20px", animation: "spin 1s linear infinite" }} />
               ) : (
-                <PenLine className="w-5 h-5" />
+                <PenLine style={{ width: "20px", height: "20px" }} />
               )}
               Store on Blockchain
             </button>
           ) : (
-            <div className="p-3 bg-blue-50 rounded-lg">
-              <p className="text-sm font-medium text-blue-800 mb-1">Transaction Confirmed</p>
-              <p className="text-xs break-all text-gray-600">{txHash}</p>
+            <div
+              style={{
+                padding: "var(--spacing-md)",
+                backgroundColor: "rgba(0, 100, 224, 0.1)",
+                borderRadius: "var(--rounded-lg)",
+              }}
+            >
+              <p style={{ fontSize: "14px", fontWeight: 700, color: "var(--color-primary)", marginBottom: "var(--spacing-xxs)" }}>
+                Transaction Confirmed
+              </p>
+              <p style={{ fontSize: "12px", wordBreak: "break-all", color: "var(--color-charcoal)" }}>
+                {txHash}
+              </p>
             </div>
           )}
         </div>

@@ -27,40 +27,75 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="max-w-4xl mx-auto p-6">
+    <div className="min-h-screen" style={{ backgroundColor: "var(--color-canvas)" }}>
+      <div className="max-w-4xl mx-auto" style={{ padding: "var(--spacing-xxl)" }}>
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="text-center" style={{ marginBottom: "var(--spacing-xxxl)" }}>
+          <h1
+            style={{
+              fontSize: "48px",
+              fontWeight: 500,
+              lineHeight: 1.17,
+              color: "var(--color-ink-deep)",
+              marginBottom: "var(--spacing-sm)",
+            }}
+          >
             Document Registry
           </h1>
-          <p className="text-gray-600">
+          <p
+            style={{
+              fontSize: "18px",
+              fontWeight: 400,
+              lineHeight: 1.44,
+              color: "var(--color-steel)",
+            }}
+          >
             Store and verify document authenticity on Ethereum
           </p>
         </div>
 
-        {/* Wallet Connection */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+        {/* Wallet Connection Card */}
+        <div
+          className="card-product-feature"
+          style={{ marginBottom: "var(--spacing-xl)" }}
+        >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Wallet className="w-6 h-6 text-blue-600" />
-              <span className="font-medium text-gray-800">
+            <div className="flex items-center" style={{ gap: "var(--spacing-md)" }}>
+              <Wallet
+                style={{ width: "24px", height: "24px", color: "var(--color-primary)" }}
+              />
+              <span
+                style={{
+                  fontWeight: 700,
+                  fontSize: "16px",
+                  color: "var(--color-ink-deep)",
+                }}
+              >
                 {isConnected ? "Connected" : "Not Connected"}
               </span>
             </div>
 
             {isConnected ? (
-              <div className="flex items-center gap-4">
-                <div className="text-sm text-gray-600">
-                  <span className="font-mono">
+              <div className="flex items-center" style={{ gap: "var(--spacing-xl)" }}>
+                <div style={{ fontSize: "14px", color: "var(--color-charcoal)" }}>
+                  <span style={{ fontFamily: "monospace" }}>
                     {connectedWallet?.address.slice(0, 6)}...
                     {connectedWallet?.address.slice(-4)}
                   </span>
-                  <span className="ml-2 text-gray-400">(Wallet {walletIndex})</span>
+                  <span style={{ marginLeft: "var(--spacing-xs)", color: "var(--color-stone)" }}>
+                    (Wallet {walletIndex})
+                  </span>
                 </div>
                 <button
                   onClick={disconnect}
-                  className="text-sm text-red-600 hover:text-red-800"
+                  style={{
+                    fontSize: "14px",
+                    color: "var(--color-critical)",
+                    fontWeight: 700,
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
                 >
                   Disconnect
                 </button>
@@ -69,24 +104,60 @@ function AppContent() {
               <div className="relative">
                 <button
                   onClick={() => setShowWalletDropdown(!showWalletDropdown)}
-                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="btn-primary"
+                  style={{ display: "flex", alignItems: "center", gap: "var(--spacing-xs)" }}
                 >
                   Connect Wallet
-                  <ChevronDown className="w-4 h-4" />
+                  <ChevronDown style={{ width: "16px", height: "16px" }} />
                 </button>
 
                 {showWalletDropdown && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                  <div
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      marginTop: "var(--spacing-xs)",
+                      width: "256px",
+                      backgroundColor: "var(--color-canvas)",
+                      border: "1px solid var(--color-hairline-soft)",
+                      borderRadius: "var(--rounded-xl)",
+                      boxShadow: "rgba(20, 22, 26, 0.3) 0px 1px 4px 0px",
+                      zIndex: 10,
+                    }}
+                  >
                     {wallets.map((wallet, index) => (
                       <button
                         key={index}
                         onClick={() => handleConnect(index)}
-                        className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-0"
+                        style={{
+                          width: "100%",
+                          textAlign: "left",
+                          padding: "var(--spacing-md) var(--spacing-base)",
+                          borderBottom:
+                            index < wallets.length - 1
+                              ? "1px solid var(--color-hairline-soft)"
+                              : "none",
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                        }}
                       >
-                        <div className="font-medium text-gray-800">
+                        <div
+                          style={{
+                            fontWeight: 700,
+                            fontSize: "14px",
+                            color: "var(--color-ink-deep)",
+                          }}
+                        >
                           Wallet {index}
                         </div>
-                        <div className="text-xs text-gray-500 font-mono">
+                        <div
+                          style={{
+                            fontSize: "12px",
+                            color: "var(--color-stone)",
+                            fontFamily: "monospace",
+                          }}
+                        >
                           {wallet.address.slice(0, 10)}...{wallet.address.slice(-8)}
                         </div>
                       </button>
@@ -98,28 +169,47 @@ function AppContent() {
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          <div className="flex border-b border-gray-200">
+        {/* Main Content Card */}
+        <div className="card-product-feature">
+          {/* Tabs */}
+          <div
+            className="flex"
+            style={{
+              borderBottom: "1px solid var(--color-hairline-soft)",
+              marginBottom: "var(--spacing-xxl)",
+            }}
+          >
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-2 py-4 px-6 font-medium transition-colors ${
-                  activeTab === tab.id
-                    ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
-                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                }`}
+                className={activeTab === tab.id ? "tab-pill tab-pill-active" : "tab-pill"}
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "var(--spacing-xs)",
+                  borderRadius: 0,
+                  border: "none",
+                  borderBottom:
+                    activeTab === tab.id
+                      ? "2px solid var(--color-ink-deep)"
+                      : "2px solid transparent",
+                  paddingBottom: "var(--spacing-md)",
+                  marginBottom: "-1px",
+                }}
               >
-                <tab.icon className="w-5 h-5" />
+                <tab.icon style={{ width: "20px", height: "20px" }} />
                 {tab.label}
               </button>
             ))}
           </div>
 
-          <div className="p-6">
+          {/* Tab Content */}
+          <div>
             {activeTab === "upload" && (
-              <div className="space-y-6">
+              <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-xxl)" }}>
                 <FileUploader onHashComputed={setDocumentHash} />
                 <DocumentSigner hash={documentHash} />
               </div>
@@ -132,10 +222,17 @@ function AppContent() {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-8 text-sm text-gray-500">
+        <div
+          className="text-center"
+          style={{
+            marginTop: "var(--spacing-xxl)",
+            fontSize: "14px",
+            color: "var(--color-stone)",
+          }}
+        >
           <p>
             Chain ID: {process.env.NEXT_PUBLIC_CHAIN_ID || "31337"} | Contract:{" "}
-            <span className="font-mono">
+            <span style={{ fontFamily: "monospace" }}>
               {process.env.NEXT_PUBLIC_CONTRACT_ADDRESS?.slice(0, 10)}...
             </span>
           </p>

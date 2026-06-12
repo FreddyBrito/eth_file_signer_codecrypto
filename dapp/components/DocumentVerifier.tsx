@@ -65,30 +65,72 @@ export default function DocumentVerifier() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-500 transition-colors">
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-md)" }}>
+      {/* File Upload */}
+      <div
+        style={{
+          border: "2px dashed var(--color-hairline)",
+          borderRadius: "var(--rounded-xxxl)",
+          padding: "var(--spacing-xl)",
+          textAlign: "center",
+          cursor: "pointer",
+          transition: "border-color 0.15s ease",
+        }}
+        onClick={() => fileRef.current?.click()}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.borderColor = "var(--color-primary)")
+        }
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.borderColor = "var(--color-hairline)")
+        }
+      >
         <input
           ref={fileRef}
           type="file"
           onChange={handleFileChange}
-          className="hidden"
+          style={{ display: "none" }}
           id="verify-file-upload"
         />
-        <label htmlFor="verify-file-upload" className="cursor-pointer">
-          <Upload className="w-10 h-10 mx-auto text-gray-400 mb-3" />
-          {fileName ? (
-            <div className="flex items-center justify-center gap-2">
-              <FileCheck className="w-5 h-5 text-green-600" />
-              <span className="font-medium text-green-800">{fileName}</span>
-            </div>
-          ) : (
-            <p className="text-gray-600">Click to upload file for verification</p>
-          )}
-        </label>
+        <Upload
+          style={{
+            width: "40px",
+            height: "40px",
+            margin: "0 auto var(--spacing-sm)",
+            color: "var(--color-stone)",
+          }}
+        />
+        {fileName ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "var(--spacing-xs)",
+            }}
+          >
+            <FileCheck style={{ width: "20px", height: "20px", color: "var(--color-success)" }} />
+            <span style={{ fontWeight: 700, fontSize: "14px", color: "var(--color-success)" }}>
+              {fileName}
+            </span>
+          </div>
+        ) : (
+          <p style={{ fontSize: "16px", color: "var(--color-charcoal)" }}>
+            Click to upload file for verification
+          </p>
+        )}
       </div>
 
+      {/* Hash Input */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          style={{
+            display: "block",
+            fontSize: "14px",
+            fontWeight: 700,
+            color: "var(--color-ink)",
+            marginBottom: "var(--spacing-xs)",
+          }}
+        >
           Document Hash
         </label>
         <input
@@ -96,12 +138,21 @@ export default function DocumentVerifier() {
           value={fileHash}
           onChange={(e) => setFileHash(e.target.value)}
           placeholder="0x... or upload a file above"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          className="text-input"
         />
       </div>
 
+      {/* Signer Address Input */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          style={{
+            display: "block",
+            fontSize: "14px",
+            fontWeight: 700,
+            color: "var(--color-ink)",
+            marginBottom: "var(--spacing-xs)",
+          }}
+        >
           Signer Address
         </label>
         <input
@@ -109,62 +160,99 @@ export default function DocumentVerifier() {
           value={signerAddress}
           onChange={(e) => setSignerAddress(e.target.value)}
           placeholder="0x..."
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="text-input"
         />
       </div>
 
+      {/* Verify Button */}
       <button
         onClick={handleVerify}
         disabled={!fileHash || !signerAddress || loading}
-        className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="btn-buy-cta"
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "var(--spacing-xs)",
+        }}
       >
         {loading ? (
-          <Loader2 className="w-5 h-5 animate-spin" />
+          <Loader2 style={{ width: "20px", height: "20px", animation: "spin 1s linear infinite" }} />
         ) : (
-          <ShieldCheck className="w-5 h-5" />
+          <ShieldCheck style={{ width: "20px", height: "20px" }} />
         )}
         Verify Document
       </button>
 
+      {/* Error */}
       {error && (
-        <div className="p-4 bg-red-50 rounded-lg">
-          <div className="flex items-center gap-2">
-            <ShieldAlert className="w-5 h-5 text-red-600" />
-            <span className="text-red-800 font-medium">Error</span>
+        <div
+          style={{
+            padding: "var(--spacing-lg)",
+            backgroundColor: "rgba(228, 30, 63, 0.1)",
+            borderRadius: "var(--rounded-xl)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "var(--spacing-xs)",
+            }}
+          >
+            <ShieldAlert style={{ width: "20px", height: "20px", color: "var(--color-critical)" }} />
+            <span style={{ fontWeight: 700, color: "var(--color-critical)" }}>Error</span>
           </div>
-          <p className="text-sm text-red-600 mt-1">{error}</p>
+          <p style={{ fontSize: "14px", color: "var(--color-critical-strong)", marginTop: "var(--spacing-xs)" }}>
+            {error}
+          </p>
         </div>
       )}
 
+      {/* Result */}
       {result && (
         <div
-          className={`p-4 rounded-lg ${
-            result.isValid ? "bg-green-50" : "bg-red-50"
-          }`}
+          style={{
+            padding: "var(--spacing-lg)",
+            backgroundColor: result.isValid
+              ? "rgba(49, 162, 76, 0.1)"
+              : "rgba(228, 30, 63, 0.1)",
+            borderRadius: "var(--rounded-xl)",
+          }}
         >
-          <div className="flex items-center gap-2 mb-2">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "var(--spacing-xs)",
+              marginBottom: "var(--spacing-sm)",
+            }}
+          >
             {result.isValid ? (
-              <ShieldCheck className="w-6 h-6 text-green-600" />
+              <ShieldCheck style={{ width: "24px", height: "24px", color: "var(--color-success)" }} />
             ) : (
-              <ShieldAlert className="w-6 h-6 text-red-600" />
+              <ShieldAlert style={{ width: "24px", height: "24px", color: "var(--color-critical)" }} />
             )}
             <span
-              className={`font-bold text-lg ${
-                result.isValid ? "text-green-800" : "text-red-800"
-              }`}
+              style={{
+                fontWeight: 700,
+                fontSize: "18px",
+                color: result.isValid ? "var(--color-success)" : "var(--color-critical)",
+              }}
             >
               {result.isValid ? "VALID" : "INVALID"}
             </span>
           </div>
 
           {result.documentInfo && (
-            <div className="text-sm space-y-1">
-              <p className="text-gray-600">
-                <span className="font-medium">Stored Signer:</span>{" "}
+            <div style={{ fontSize: "14px" }}>
+              <p style={{ color: "var(--color-charcoal)", marginBottom: "var(--spacing-xxs)" }}>
+                <span style={{ fontWeight: 700 }}>Stored Signer:</span>{" "}
                 {result.documentInfo.signer}
               </p>
-              <p className="text-gray-600">
-                <span className="font-medium">Timestamp:</span>{" "}
+              <p style={{ color: "var(--color-charcoal)" }}>
+                <span style={{ fontWeight: 700 }}>Timestamp:</span>{" "}
                 {new Date(Number(result.documentInfo.timestamp) * 1000).toLocaleString()}
               </p>
             </div>
