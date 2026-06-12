@@ -11,12 +11,10 @@ interface FileUploaderProps {
 export default function FileUploader({ onHashComputed }: FileUploaderProps) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [computedHash, setComputedHash] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const processFile = async (file: File) => {
     setFileName(file.name);
     const buffer = await file.arrayBuffer();
     const uint8Array = new Uint8Array(buffer);
@@ -25,23 +23,50 @@ export default function FileUploader({ onHashComputed }: FileUploaderProps) {
     onHashComputed(hash);
   };
 
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await processFile(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      await processFile(file);
+    }
+  };
+
   return (
     <div
       style={{
-        border: "2px dashed var(--color-hairline)",
+        border: `2px dashed ${isDragOver ? "var(--color-primary)" : "var(--color-hairline)"}`,
         borderRadius: "var(--rounded-xxxl)",
         padding: "var(--spacing-xxl)",
         textAlign: "center",
         cursor: "pointer",
-        transition: "border-color 0.15s ease",
+        transition: "all 0.2s ease",
+        backgroundColor: isDragOver ? "rgba(0, 100, 224, 0.05)" : "transparent",
       }}
       onClick={() => fileRef.current?.click()}
-      onMouseEnter={(e) =>
-        (e.currentTarget.style.borderColor = "var(--color-primary)")
-      }
-      onMouseLeave={(e) =>
-        (e.currentTarget.style.borderColor = "var(--color-hairline)")
-      }
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
       <input
         ref={fileRef}
@@ -56,19 +81,25 @@ export default function FileUploader({ onHashComputed }: FileUploaderProps) {
           width: "48px",
           height: "48px",
           margin: "0 auto var(--spacing-md)",
-          color: "var(--color-stone)",
+          color: isDragOver ? "var(--color-primary)" : "var(--color-stone)",
+          transition: "color 0.2s ease",
         }}
       />
 
       <p
         style={{
           fontSize: "16px",
-          fontWeight: 400,
-          color: "var(--color-charcoal)",
+          fontWeight: isDragOver ? 700 : 400,
+          color: isDragOver ? "var(--color-primary)" : "var(--color-charcoal)",
           marginBottom: "var(--spacing-xs)",
+          transition: "color 0.2s ease",
         }}
       >
-        {fileName ? "Click to select another file" : "Click to select a file"}
+        {isDragOver
+          ? "Drop file here"
+          : fileName
+            ? "Drop another file or click to select"
+            : "Drop a file here or click to select"}
       </p>
       <p style={{ fontSize: "14px", color: "var(--color-stone)" }}>
         Any file type supported

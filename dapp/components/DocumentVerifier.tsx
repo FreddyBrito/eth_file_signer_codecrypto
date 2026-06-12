@@ -18,17 +18,44 @@ export default function DocumentVerifier() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const processFile = async (file: File) => {
     setFileName(file.name);
     const buffer = await file.arrayBuffer();
     const uint8Array = new Uint8Array(buffer);
     const hash = ethers.keccak256(uint8Array);
     setFileHash(hash);
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await processFile(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      await processFile(file);
+    }
   };
 
   const handleVerify = async () => {
@@ -66,23 +93,21 @@ export default function DocumentVerifier() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-md)" }}>
-      {/* File Upload */}
+      {/* File Upload with Drag & Drop */}
       <div
         style={{
-          border: "2px dashed var(--color-hairline)",
+          border: `2px dashed ${isDragOver ? "var(--color-primary)" : "var(--color-hairline)"}`,
           borderRadius: "var(--rounded-xxxl)",
           padding: "var(--spacing-xl)",
           textAlign: "center",
           cursor: "pointer",
-          transition: "border-color 0.15s ease",
+          transition: "all 0.2s ease",
+          backgroundColor: isDragOver ? "rgba(0, 100, 224, 0.05)" : "transparent",
         }}
         onClick={() => fileRef.current?.click()}
-        onMouseEnter={(e) =>
-          (e.currentTarget.style.borderColor = "var(--color-primary)")
-        }
-        onMouseLeave={(e) =>
-          (e.currentTarget.style.borderColor = "var(--color-hairline)")
-        }
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
       >
         <input
           ref={fileRef}
@@ -96,7 +121,8 @@ export default function DocumentVerifier() {
             width: "40px",
             height: "40px",
             margin: "0 auto var(--spacing-sm)",
-            color: "var(--color-stone)",
+            color: isDragOver ? "var(--color-primary)" : "var(--color-stone)",
+            transition: "color 0.2s ease",
           }}
         />
         {fileName ? (
@@ -114,8 +140,15 @@ export default function DocumentVerifier() {
             </span>
           </div>
         ) : (
-          <p style={{ fontSize: "16px", color: "var(--color-charcoal)" }}>
-            Click to upload file for verification
+          <p
+            style={{
+              fontSize: "16px",
+              fontWeight: isDragOver ? 700 : 400,
+              color: isDragOver ? "var(--color-primary)" : "var(--color-charcoal)",
+              transition: "color 0.2s ease",
+            }}
+          >
+            {isDragOver ? "Drop file here" : "Drop a file here or click to upload"}
           </p>
         )}
       </div>
@@ -137,7 +170,7 @@ export default function DocumentVerifier() {
           type="text"
           value={fileHash}
           onChange={(e) => setFileHash(e.target.value)}
-          placeholder="0x... or upload a file above"
+          placeholder="0x... or drop a file above"
           className="text-input"
         />
       </div>
