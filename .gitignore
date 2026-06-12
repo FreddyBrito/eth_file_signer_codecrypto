@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Foundry
+sc/lib/
+sc/cache/
+sc/out/
+sc/broadcast/
+
+# Next.js
+dapp/.next/
+dapp/out/
+dapp/build/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS files
+.DS_Store
+*.pem
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
