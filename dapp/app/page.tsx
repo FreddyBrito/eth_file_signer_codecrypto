@@ -6,7 +6,7 @@ import FileUploader from "@/components/FileUploader";
 import DocumentSigner from "@/components/DocumentSigner";
 import DocumentVerifier from "@/components/DocumentVerifier";
 import DocumentHistory from "@/components/DocumentHistory";
-import { Wallet, FileCheck, Search, History, ChevronDown } from "lucide-react";
+import { Wallet, FileCheck, Search, History, ChevronDown, Copy, Check } from "lucide-react";
 
 function AppContent() {
   const { isConnected, connectedWallet, wallets, connect, disconnect, walletIndex } =
@@ -14,6 +14,13 @@ function AppContent() {
   const [activeTab, setActiveTab] = useState<"upload" | "verify" | "history">("upload");
   const [documentHash, setDocumentHash] = useState<string | null>(null);
   const [showWalletDropdown, setShowWalletDropdown] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+
+  const handleCopyAddress = async (address: string, index: number) => {
+    await navigator.clipboard.writeText(address);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 2000);
+  };
 
   const tabs = [
     { id: "upload" as const, label: "Upload & Sign", icon: FileCheck },
@@ -126,41 +133,73 @@ function AppContent() {
                     }}
                   >
                     {wallets.map((wallet, index) => (
-                      <button
+                      <div
                         key={index}
-                        onClick={() => handleConnect(index)}
                         style={{
-                          width: "100%",
-                          textAlign: "left",
-                          padding: "var(--spacing-md) var(--spacing-base)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
                           borderBottom:
                             index < wallets.length - 1
                               ? "1px solid var(--color-hairline-soft)"
                               : "none",
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
                         }}
                       >
-                        <div
+                        <button
+                          onClick={() => handleConnect(index)}
                           style={{
-                            fontWeight: 700,
-                            fontSize: "14px",
-                            color: "var(--color-ink-deep)",
+                            flex: 1,
+                            textAlign: "left",
+                            padding: "var(--spacing-md) var(--spacing-base)",
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
                           }}
                         >
-                          Wallet {index}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: "12px",
-                            color: "var(--color-stone)",
-                            fontFamily: "monospace",
+                          <div
+                            style={{
+                              fontWeight: 700,
+                              fontSize: "14px",
+                              color: "var(--color-ink-deep)",
+                            }}
+                          >
+                            Wallet {index}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "12px",
+                              color: "var(--color-stone)",
+                              fontFamily: "monospace",
+                            }}
+                          >
+                            {wallet.address.slice(0, 10)}...{wallet.address.slice(-8)}
+                          </div>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCopyAddress(wallet.address, index);
                           }}
+                          style={{
+                            padding: "var(--spacing-xs)",
+                            marginRight: "var(--spacing-sm)",
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            color: copiedIndex === index ? "var(--color-success)" : "var(--color-stone)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                          title="Copy full address"
                         >
-                          {wallet.address.slice(0, 10)}...{wallet.address.slice(-8)}
-                        </div>
-                      </button>
+                          {copiedIndex === index ? (
+                            <Check style={{ width: "16px", height: "16px" }} />
+                          ) : (
+                            <Copy style={{ width: "16px", height: "16px" }} />
+                          )}
+                        </button>
+                      </div>
                     ))}
                   </div>
                 )}
