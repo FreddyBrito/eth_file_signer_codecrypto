@@ -6,7 +6,7 @@ import "../src/DocumentRegistry.sol";
 
 contract DeployScript is Script {
     function run() external returns (DocumentRegistry) {
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        uint256 deployerPrivateKey = vm.envOr("PRIVATE_KEY", uint256(0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80));
         vm.startBroadcast(deployerPrivateKey);
 
         DocumentRegistry registry = new DocumentRegistry();
